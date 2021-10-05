@@ -12,7 +12,7 @@ $(document).ready(function () {
 })
 
 function loadTable() {
-    $.ajax("/rest/all", {
+    $.ajax("/api/users", {
         method: "GET",
         dataType: "json",
         success: function (msg) {
@@ -47,7 +47,7 @@ function editUser() {
     user.password = $("#password").val();
     user.id = $("#editId").val();
     user.roles = $("#roles1").val(),
-        $.ajax("/rest/edit", {
+        $.ajax("/api/users", {
             method: "PUT",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -71,7 +71,7 @@ function userForEdit(obj) {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/rest/get",
+        url: "/api/user",
         data: obj.value,
         dataType: 'json',
         timeout: 100000,
@@ -82,7 +82,7 @@ function userForEdit(obj) {
             $("#surname").val(user.surname);
             $("#age").val(user.age);
             $("#email").val(user.email);
-            $("#password").val("");
+            $("#password").val(user.password);
             $("#roles1:selected").val(user.roles);
             $("#editId").val(user.id);
             $("#editButton").val(user.id);
@@ -102,7 +102,7 @@ function userForDelete(obj) {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/rest/get",
+        url: "/api/user",
         data: obj.value,
         dataType: 'json',
         timeout: 100000,
@@ -129,7 +129,7 @@ function userForDelete(obj) {
 
 
 function addUser() {
-    $.ajax("/rest/add", {
+    $.ajax("/api/users", {
         method: "post",
         contentType: "application/json",
         data: JSON.stringify(
@@ -165,7 +165,7 @@ function deleteUser() {
     $.ajax({
         type: "DELETE",
         contentType: "application/json",
-        url: "/rest/delete/" + $("#deleteId").val(),
+        url: "/api/users/" + $("#deleteId").val(),
         data: $("#deleteId").val(),
         dataType: 'json',
         timeout: 100000,

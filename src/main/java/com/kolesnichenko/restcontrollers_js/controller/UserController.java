@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserController {
 
     private UserService userService;
-
     @Autowired
-    public void setUserService(@Qualifier("userServiceImpl") UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
+
 
     @GetMapping("admin")
     public String listUsers(Model model){

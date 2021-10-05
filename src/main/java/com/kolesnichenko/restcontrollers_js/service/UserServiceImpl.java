@@ -48,4 +48,17 @@ public class UserServiceImpl implements UserService{
     public void deleteById(int id) {
         userDao.deleteById(id);
     }
+
+    @Override
+    public User updateUser(User user) {
+       if(user.getPassword().startsWith("$2a$")){
+           user.setPassword(userDao.findByName(user.getName()).getPassword());
+       }
+       else {
+           user.setPassword(passwordEncoder.encode(user.getPassword()));
+       }
+       return userDao.save(user);
+    }
+
+
 }

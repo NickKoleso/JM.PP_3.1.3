@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@RequestMapping("/rest")
+@RequestMapping("/api")
 @RestController
 public class UserRestController {
 
@@ -20,13 +20,13 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/users")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/users")
     public ResponseEntity<Iterable<User>> getAllUsers() {
         final Iterable<User> users = userService.findAll();
         return users != null
@@ -34,7 +34,7 @@ public class UserRestController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(value = "/get")
+    @PostMapping(value = "/user")
     public ResponseEntity<User> getUser(@RequestBody int id) {
         User user = this.userService.findById(id);
         return user != null
@@ -42,20 +42,20 @@ public class UserRestController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
+    @DeleteMapping(value = "/users/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") int id) {
         userService.deleteById(id);
 
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 
-    @PutMapping(value = "/edit")
+    @PutMapping(value = "/users")
     public ResponseEntity<User> editUser(@RequestBody User user) {
         if ("".equals(user.getStringRoles())) {
             user.setRoles(userService.findById(user.getId()).getRoles());
         }
-        userService.save(user);
+        userService.updateUser(user);
         return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.OK);
     }
 }

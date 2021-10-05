@@ -13,4 +13,6 @@ public interface UserService {
     Iterable<User> findAll();
 
     void deleteById(int id);
+
+    User updateUser(User user);
 }
