@@ -12,6 +12,7 @@ $(document).ready(function () {
 })
 
 function loadTable() {
+
     $.ajax("/api/users", {
         method: "GET",
         dataType: "json",
@@ -26,7 +27,7 @@ function loadTable() {
                     '<td>' + user.age + '</td>' +
                     '<td>' + user.email + '</td>' +
                     '<td>' + userRoles(user.roles) + '</td>' +
-                    '<td>' + '<button type="button" name="buttonEdit" onclick="userForEdit(this)" data-target="#editModal" value=' + user.id + ' ' +
+                    '<td>' + '<button type="button" name="buttonEdit" id="edit" onclick="userForEdit(this)" data-target="#editModal" value=' + user.id + ' ' +
                     'class="btn btn-info" data-toggle="modal">' + 'Edit' + '</button>' + '</td>' +
                     '<td>' + '<button type="button" name="buttonDelete" onclick="userForDelete(this)" data-target="#deleteModal" value=' + user.id + ' ' +
                     ' class="btn btn-danger" data-toggle="modal">' +
@@ -47,31 +48,32 @@ function editUser() {
     user.password = $("#password").val();
     user.id = $("#editId").val();
     user.roles = $("#roles1").val(),
-        $.ajax("/api/users", {
-            method: "PUT",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify(user),
+            $.ajax("/api/users", {
+                method: "PUT",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(user),
 
-            success: function (data) {
-                console.log("SUCCESS: ", data);
-                loadTable();
-                $(".modal").modal('hide');
-            },
-            error: function (e) {
-                console.log("ERROR: ", e);
-            },
-            done: function (e) {
-                console.log("DONE");
-            }
-        })
+                success: function (data) {
+                    console.log("SUCCESS: ", data);
+                    loadTable();
+                    $(".modal").modal('hide');
+                },
+                error: function (e) {
+                    console.log("ERROR: ", e);
+                },
+                done: function (e) {
+                    console.log("DONE");
+                }
+            })
 }
 
 function userForEdit(obj) {
+    let user_id = obj.value
     $.ajax({
-        type: "POST",
+        type: "GET",
         contentType: "application/json",
-        url: "/api/user",
+        url: "/api/users/" + user_id,
         data: obj.value,
         dataType: 'json',
         timeout: 100000,
@@ -96,13 +98,12 @@ function userForEdit(obj) {
     });
 }
 
-
-
 function userForDelete(obj) {
+    let user_id = obj.value
     $.ajax({
-        type: "POST",
+        type: "GET",
         contentType: "application/json",
-        url: "/api/user",
+        url: "/api/users/" + user_id,
         data: obj.value,
         dataType: 'json',
         timeout: 100000,
@@ -182,6 +183,7 @@ function deleteUser() {
         }
     });
 }
+
 
 
 

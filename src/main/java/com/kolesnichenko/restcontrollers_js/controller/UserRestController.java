@@ -5,6 +5,7 @@ import com.kolesnichenko.restcontrollers_js.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +35,8 @@ public class UserRestController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(value = "/user")
-    public ResponseEntity<User> getUser(@RequestBody int id) {
+    @GetMapping(value = "/users/{id}")
+    public ResponseEntity<User> getUser(@PathVariable int id) {
         User user = this.userService.findById(id);
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
@@ -47,6 +48,7 @@ public class UserRestController {
         userService.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
 
     }
 
