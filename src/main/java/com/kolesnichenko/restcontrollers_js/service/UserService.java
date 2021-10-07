@@ -4,7 +4,7 @@ package com.kolesnichenko.restcontrollers_js.service;
 import com.kolesnichenko.restcontrollers_js.model.User;
 
 public interface UserService {
-    public User findByName(String name);
+    public User findByEmail(String email);
 
     User save(User user);
 

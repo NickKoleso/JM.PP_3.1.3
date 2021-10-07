@@ -24,8 +24,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findByName(String name) {
-        return userDao.findByName(name);
+    public User findByEmail(String email) {
+        return userDao.findByEmail(email);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User updateUser(User user) {
        if(user.getPassword().startsWith("$2a$")){
-           user.setPassword(userDao.findByName(user.getName()).getPassword());
+           user.setPassword(userDao.findByEmail(user.getEmail()).getPassword());
        }
        else {
            user.setPassword(passwordEncoder.encode(user.getPassword()));
