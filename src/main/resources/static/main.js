@@ -48,24 +48,24 @@ function editUser() {
     user.password = $("#password").val();
     user.id = $("#editId").val();
     user.roles = $("#roles1").val(),
-            $.ajax("/api/users", {
-                method: "PUT",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: JSON.stringify(user),
+        $.ajax("/api/users", {
+            method: "PUT",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(user),
 
-                success: function (data) {
-                    console.log("SUCCESS: ", data);
-                    loadTable();
-                    $(".modal").modal('hide');
-                },
-                error: function (e) {
-                    console.log("ERROR: ", e);
-                },
-                done: function (e) {
-                    console.log("DONE");
-                }
-            })
+            success: function (data) {
+                console.log("SUCCESS: ", data);
+                loadTable();
+                $(".modal").modal('hide');
+            },
+            error: function (e) {
+                console.log("ERROR: ", e);
+            },
+            done: function (e) {
+                console.log("DONE");
+            }
+        })
 }
 
 function userForEdit(obj) {
@@ -74,7 +74,6 @@ function userForEdit(obj) {
         type: "GET",
         contentType: "application/json",
         url: "/api/users/" + user_id,
-        data: obj.value,
         dataType: 'json',
         timeout: 100000,
         success: function (data) {
@@ -104,7 +103,6 @@ function userForDelete(obj) {
         type: "GET",
         contentType: "application/json",
         url: "/api/users/" + user_id,
-        data: obj.value,
         dataType: 'json',
         timeout: 100000,
         success: function (data) {
