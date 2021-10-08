@@ -1,5 +1,7 @@
 package com.kolesnichenko.restcontrollers_js.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -25,6 +27,7 @@ public class Role implements GrantedAuthority {
         this.id = id;
         this.name = name;
     }
+
     public Role(String name) {
         this.name = name;
     }

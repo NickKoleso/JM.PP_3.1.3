@@ -1,14 +1,14 @@
 package com.kolesnichenko.restcontrollers_js.controller;
 
+import com.kolesnichenko.restcontrollers_js.dao.RoleDao;
 import com.kolesnichenko.restcontrollers_js.model.User;
 import com.kolesnichenko.restcontrollers_js.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 @RequestMapping("/api")
 @RestController
@@ -54,10 +54,8 @@ public class UserRestController {
 
     @PutMapping(value = "/users")
     public ResponseEntity<User> editUser(@RequestBody User user) {
-        if ("".equals(user.getStringRoles())) {
-            user.setRoles(userService.findById(user.getId()).getRoles());
-        }
-        userService.updateUser(user);
+
+        userService.save(user);
         return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.OK);
     }
 }

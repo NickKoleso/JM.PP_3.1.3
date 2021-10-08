@@ -1,5 +1,6 @@
 package com.kolesnichenko.restcontrollers_js.security;
 
+import com.kolesnichenko.restcontrollers_js.security.oauth2.CustomOAuth2UserService;
 import com.kolesnichenko.restcontrollers_js.service.MyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +20,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private MyUserDetailService myUserDetailService;
     private LoginSuccessHandler loginSuccessHandler;
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Autowired
-    public SecurityConfig(MyUserDetailService myUserDetailService, LoginSuccessHandler loginSuccessHandler) {
+    public SecurityConfig(MyUserDetailService myUserDetailService, LoginSuccessHandler loginSuccessHandler, CustomOAuth2UserService customOAuth2UserService) {
         this.myUserDetailService = myUserDetailService;
         this.loginSuccessHandler = loginSuccessHandler;
+        this.customOAuth2UserService = customOAuth2UserService;
     }
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailService).passwordEncoder(passwordEncoder());
@@ -43,7 +47,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 // даем доступ к форме логина всем
-                .permitAll();
+                .permitAll()
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
+                .and()
+                .successHandler(loginSuccessHandler)
+                .and().csrf().disable();
 
         http.logout()
                 // разрешаем делать логаут всем

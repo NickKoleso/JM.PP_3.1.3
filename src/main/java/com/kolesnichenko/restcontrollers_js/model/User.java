@@ -1,13 +1,11 @@
 package com.kolesnichenko.restcontrollers_js.model;
 
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -24,8 +22,6 @@ public class User implements UserDetails {
     @Column
     private String surname;
 
-
-
     @Column
     private int age;
 
@@ -35,20 +31,28 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    Set<Role> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider")
+    private AuthProvider authProvider;
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id")
+            , inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public User() {
 
     }
 
-    public User(int id, String name, String surname, int age, String email, String password, Set<Role> roles) {
+    public User(int id, String name, String surname, int age, String email, String password, AuthProvider authProvider, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.age = age;
         this.email = email;
         this.password = password;
+        this.authProvider = authProvider;
         this.roles = roles;
     }
 
@@ -138,7 +142,15 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public String getStringRoles(){
+    public AuthProvider getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(AuthProvider authProvider) {
+        this.authProvider = authProvider;
+    }
+
+    public String getStringRoles() {
         StringBuilder r = new StringBuilder();
         Iterator<Role> iterator = roles.iterator();
         while (iterator.hasNext()) {
