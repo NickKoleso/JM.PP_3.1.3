@@ -26,6 +26,7 @@ function loadTable() {
                     '<td>' + user.surname + '</td>' +
                     '<td>' + user.age + '</td>' +
                     '<td>' + user.email + '</td>' +
+                    '<td>' + user.authProvider + '</td>' +
                     '<td>' + userRoles(user.roles) + '</td>' +
                     '<td>' + '<button type="button" name="buttonEdit" id="edit" onclick="userForEdit(this)" data-target="#editModal" value=' + user.id + ' ' +
                     'class="btn btn-info" data-toggle="modal">' + 'Edit' + '</button>' + '</td>' +

@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         user.setRoles(roleSet);
+        user.setAuthProvider(AuthProvider.LOCAL);
         return userDao.save(user);
     }
 
@@ -80,15 +81,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void processOAuthPostLogin(String username, Map<String, Object> attributes) {
+    public void processOAuthPostLogin(String email, Map<String, Object> attributes) {
         System.out.println(attributes);
         User newUser = new User();
-        newUser.setEmail(username);
-        if (username.contains("@gmail.com")) {
+        newUser.setEmail(email);
+        if (email.contains("@gmail.com")) {
             newUser.setAuthProvider(AuthProvider.GOOGLE);
             newUser.setName((String) attributes.get("given_name"));
             newUser.setSurname((String) attributes.get("family_name"));
         }
+
         newUser.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         newUser.setRoles(Collections.singleton(roleDao.findRoleByName("USER")));
         userDao.save(newUser);

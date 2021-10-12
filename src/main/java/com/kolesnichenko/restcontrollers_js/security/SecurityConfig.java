@@ -5,17 +5,26 @@ import com.kolesnichenko.restcontrollers_js.service.MyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.persistence.PersistenceContext;
+import java.security.Principal;
 
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private MyUserDetailService myUserDetailService;
@@ -54,8 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
-                .successHandler(loginSuccessHandler)
-                .and().csrf().disable();
+                .successHandler(loginSuccessHandler);
+
 
         http.logout()
                 // разрешаем делать логаут всем
@@ -71,17 +80,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // делаем страницу регистрации недоступной для авторизированных пользователей
                 .authorizeRequests()
                 //страницы аутентификаци доступна всем
+              //  .antMatchers("/", "/oauth2/**").permitAll()
                 .antMatchers("/login").anonymous()
                 // защищенные URL
-                .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");
+                .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN", "ROLE_USER");
         http.authorizeRequests()
                 .antMatchers("/api/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
                 .anyRequest().permitAll();
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler() {
+//        DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler = new DefaultMethodSecurityExpressionHandler();
+//        defaultMethodSecurityExpressionHandler.setDefaultRolePrefix("");
+//        return defaultMethodSecurityExpressionHandler;
+//    }
+//
+//    @Bean
+//    public DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler() {
+//        DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+//        defaultWebSecurityExpressionHandler.setDefaultRolePrefix("");
+//        return defaultWebSecurityExpressionHandler;
+//    }
 }

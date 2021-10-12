@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
-    public User findByEmail(String email);
+    User findByEmail(String email);
 
     User save(User user);
 
