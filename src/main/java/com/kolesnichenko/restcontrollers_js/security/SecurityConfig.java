@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               //  .antMatchers("/", "/oauth2/**").permitAll()
                 .antMatchers("/login").anonymous()
                 // защищенные URL
-                .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN", "ROLE_USER");
+                .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");
         http.authorizeRequests()
                 .antMatchers("/api/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
@@ -96,17 +96,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler() {
-//        DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler = new DefaultMethodSecurityExpressionHandler();
-//        defaultMethodSecurityExpressionHandler.setDefaultRolePrefix("");
-//        return defaultMethodSecurityExpressionHandler;
-//    }
-//
-//    @Bean
-//    public DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler() {
-//        DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-//        defaultWebSecurityExpressionHandler.setDefaultRolePrefix("");
-//        return defaultWebSecurityExpressionHandler;
-//    }
 }

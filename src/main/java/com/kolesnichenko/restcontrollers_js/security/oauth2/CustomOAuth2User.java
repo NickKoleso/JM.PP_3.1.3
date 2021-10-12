@@ -2,14 +2,19 @@ package com.kolesnichenko.restcontrollers_js.security.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class CustomOAuth2User implements OAuth2User {
 
     private OAuth2User oAuth2User;
+
+    private List<GrantedAuthority> authorities =
+            AuthorityUtils.createAuthorityList("USER");
 
     @Autowired
     public CustomOAuth2User(OAuth2User oAuth2User) {
@@ -23,7 +28,7 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return oAuth2User.getAuthorities();
+        return this.authorities;
     }
 
     @Override
